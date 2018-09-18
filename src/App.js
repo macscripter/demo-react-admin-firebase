@@ -1,11 +1,8 @@
-// tslint:disable-next-line:no-var-requires
-// import * as  jsonServerProvider from 'ra-data-json-server';
 import * as React from 'react';
 import { PostList, PostShow, PostCreate, PostEdit } from "./posts";
-
-// import jsonServerProvider from 'ra-data-json-server';
 import { Admin, Resource } from 'react-admin';
 import FirebaseProvider from 'react-admin-firebase';
+import FirebaseRealtime from './test/realtimeSaga';
 
 const config = {
   apiKey: "AIzaSyBJIVBrJ1Ru5pd-wJ1dlCYj6ddq1AAw7xI",
@@ -17,11 +14,13 @@ const config = {
 };
 
 const firebaseProvider = FirebaseProvider(config);
+const firebaseRealtime = FirebaseRealtime(firebaseProvider);
 
 class App extends React.Component {
   render() {
     return (
       <Admin 
+        customSagas={[firebaseRealtime]}
         dataProvider={firebaseProvider} 
       >
         <Resource name="posts" list={PostList} show={PostShow} create={PostCreate} edit={PostEdit}/>
