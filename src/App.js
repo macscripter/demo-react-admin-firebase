@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { PostList, PostShow, PostCreate, PostEdit } from "./posts";
 import { Admin, Resource } from 'react-admin';
-import FirebaseProvider from 'react-admin-firebase';
-import FirebaseRealtime from './test/realtimeSaga';
+import {
+  FirebaseRealTimeSaga,
+  FirebaseDataProvider
+} from 'react-admin-firebase';
 
 const config = {
   apiKey: "AIzaSyBJIVBrJ1Ru5pd-wJ1dlCYj6ddq1AAw7xI",
@@ -13,15 +15,18 @@ const config = {
   messagingSenderId: "653484435936",
 };
 
-const firebaseProvider = FirebaseProvider(config);
-const firebaseRealtime = FirebaseRealtime(firebaseProvider);
+const dataProvider = FirebaseDataProvider(config);
+const options = {
+  observe: ['posts']
+}
+const firebaseRealtime = FirebaseRealTimeSaga(dataProvider, options);
 
 class App extends React.Component {
   render() {
     return (
       <Admin 
         customSagas={[firebaseRealtime]}
-        dataProvider={firebaseProvider} 
+        dataProvider={dataProvider} 
       >
         <Resource name="posts" list={PostList} show={PostShow} create={PostCreate} edit={PostEdit}/>
       </Admin>
